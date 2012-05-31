@@ -81,7 +81,8 @@ public class ContactList {
 		String[] contactIDs = this.getContactIDsFromFile();
 		for(int i=0; i<contactIDs.length; i++){
 			Contact contact = getContactFromID(contactIDs[i]);
-			this._contacts.add(contact);
+			if(contact.getDisplayName() != null)
+				this._contacts.add(contact);	
 		}
 	}
 	
