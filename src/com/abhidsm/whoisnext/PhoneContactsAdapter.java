@@ -3,6 +3,7 @@ package com.abhidsm.whoisnext;
 import java.util.List;
 
 import android.app.Activity;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ public class PhoneContactsAdapter  extends ArrayAdapter<Contact>{
 		this._contacts=contacts;
 		this._context=context;
 	}
+	
 	static class ViewHolder {
 		protected TextView contactName;
 		protected TextView contactedSince;
@@ -26,31 +28,29 @@ public class PhoneContactsAdapter  extends ArrayAdapter<Contact>{
 		protected void setContact(Contact contact)
 		{
 			contactName.setText(contact.getDisplayName());
-			contactedSince.setText("");
+			contactedSince.setText(DateFormat.format("dd, MMM", contact.getContactedTimeInLong()));
 			_contact=contact;
 		}
 		protected Contact getContact() {return _contact;}
 	}
+	
 	@Override
 	public Contact getItem(int position)
 	{
 		return _contacts.get(position);
 	}
+	
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent)
 	{
 		View view=null;
-		if(convertView==null)
-		{
-			LayoutInflater inflater=_context.getLayoutInflater();
-			view=inflater.inflate(R.layout.contacts_item, null);
-			final ViewHolder viewHolder=new ViewHolder();
-			viewHolder.contactName=(TextView)view.findViewById(R.id.contact_name);
-			viewHolder.contactedSince=(TextView)view.findViewById(R.id.contacted_since);
-			viewHolder.setContact(_contacts.get(position));
-			view.setTag(viewHolder);
-		}
-		
+		LayoutInflater inflater=_context.getLayoutInflater();
+		view=inflater.inflate(R.layout.contacts_item, null);
+		final ViewHolder viewHolder=new ViewHolder();
+		viewHolder.contactName=(TextView)view.findViewById(R.id.contact_name);
+		viewHolder.contactedSince=(TextView)view.findViewById(R.id.contacted_since);
+		viewHolder.setContact(_contacts.get(position));
+		view.setTag(viewHolder);
 		return view;
 	}
 
