@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class WhoIsNextActivity extends ListActivity {
     /** Called when the activity is first created. */
@@ -94,7 +95,10 @@ public class WhoIsNextActivity extends ListActivity {
 	        
 	        if (resultCode == Activity.RESULT_OK) {
 	            Uri contactData = data.getData();
-	            Cursor c =  managedQuery(contactData, null, null, null, null);
+	    		String where = ContactsContract.Data.HAS_PHONE_NUMBER + " = '1' "; 
+	            String sortOrder = ContactsContract.Contacts.DISPLAY_NAME + " COLLATE LOCALIZED ASC";
+	            
+	            Cursor c =  managedQuery(contactData, null, where, null, sortOrder);
 	            if (c.moveToFirst()) {
 	            	String id = c.getString(c.getColumnIndex(ContactsContract.Contacts._ID));	
 	            	String name = c.getString(c.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
@@ -106,6 +110,8 @@ public class WhoIsNextActivity extends ListActivity {
 	            	this.contacts.addContact(contact);
 	            	this.listItems = this.contacts.getContacts();
 	            	this.adapter.notifyDataSetChanged();
+	            }else{
+	            	Toast.makeText(getApplicationContext(), "No phone number is associated with the selected contact.", Toast.LENGTH_SHORT).show();
 	            }
 	        }
 	    }
