@@ -43,7 +43,7 @@ public class ContactList {
 			FileOutputStream fos = this.context.openFileOutput(WhoIsNextApplication.fileName, Context.MODE_PRIVATE);
 			for(Iterator<Contact> i = this._contacts.iterator(); i.hasNext();){
 				Contact contact = (Contact) i.next();
-				String data = contact.getDisplayName()+","; 
+				String data = contact.getId()+","; 
 				fos.write(data.getBytes());
 			}
 			fos.close();
@@ -56,7 +56,7 @@ public class ContactList {
 		}
 	}
 	
-	private String[] getContactsFromFile(){
+	private String[] getContactIDsFromFile(){
 		String data = "";
 		try {
 			FileInputStream fis = this.context.openFileInput(WhoIsNextApplication.fileName);
@@ -73,27 +73,26 @@ public class ContactList {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		String[] contacts = data.split(",");
-		return contacts;
+		String[] contactIDs = data.split(",");
+		return contactIDs;
 	}
 	
 	public void addContactsFromFile(){
-		String[] contacts = this.getContactsFromFile();
-		for(int i=0; i<contacts.length; i++){
-			Contact contact = getContactFromName(contacts[i]);
+		String[] contactIDs = this.getContactIDsFromFile();
+		for(int i=0; i<contactIDs.length; i++){
+			Contact contact = getContactFromID(contactIDs[i]);
 			if(contact.getDisplayName() != null)
 				this._contacts.add(contact);	
 		}
 	}
 	
-	private Contact getContactFromName(String contactName){
+	private Contact getContactFromID(String contactId){
 		Contact contact = new Contact();
-		String where = ContactsContract.Data.DISPLAY_NAME + " = ? and "+ ContactsContract.Data.HAS_PHONE_NUMBER+ " = '1'"; 
-		String[] whereParameters = new String[]{contactName}; 
+		String where = ContactsContract.Data._ID + " = ? ";
+		String[] whereParameters = new String[]{contactId}; 
         Uri uri=ContactsContract.Contacts.CONTENT_URI;
         ContentResolver cr = this.context.getContentResolver();
-        String sortOrder = ContactsContract.Contacts.DISPLAY_NAME + " COLLATE LOCALIZED ASC";
-        Cursor cur=cr.query(uri, null, where, whereParameters, sortOrder);
+        Cursor cur=cr.query(uri, null, where, whereParameters, null);
         if(cur.getCount()>0)
         {
             cur.moveToNext();

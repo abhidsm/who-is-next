@@ -59,10 +59,12 @@ public class WhoIsNextActivity extends ListActivity {
     {
         super.onListItemClick(l, v, position, id);
         Object o=this.getListAdapter().getItem(position);
-        Contact c=(Contact)o;
-        String url = "content://contacts/people/"+c.getId();
-		Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-		startActivityForResult(intent, 0);
+        Contact co=(Contact)o;
+    	Intent intent = new Intent(Intent.ACTION_VIEW);
+    	Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_URI, String.valueOf(co.getId()));
+    	intent.setData(uri);
+    	intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    	this.context.startActivity(intent);
     }
     
     @Override
@@ -95,10 +97,7 @@ public class WhoIsNextActivity extends ListActivity {
 	        
 	        if (resultCode == Activity.RESULT_OK) {
 	            Uri contactData = data.getData();
-	    		String where = ContactsContract.Data.HAS_PHONE_NUMBER + " = '1' "; 
-	            String sortOrder = ContactsContract.Contacts.DISPLAY_NAME + " COLLATE LOCALIZED ASC";
-	            
-	            Cursor c =  managedQuery(contactData, null, where, null, sortOrder);
+	            Cursor c =  managedQuery(contactData, null, null, null, null);
 	            if (c.moveToFirst()) {
 	            	String id = c.getString(c.getColumnIndex(ContactsContract.Contacts._ID));	
 	            	String name = c.getString(c.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
