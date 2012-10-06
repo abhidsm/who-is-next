@@ -28,7 +28,7 @@ public class PhoneContactsAdapter  extends ArrayAdapter<Contact>{
 		protected void setContact(Contact contact)
 		{
 			contactName.setText(contact.getDisplayName());
-			contactedSince.setText(DateFormat.format("dd, MMM", contact.getContactedTimeInLong()));
+			contactedSince.setText(DateFormat.format("MMM-dd", contact.getContactedTimeInLong()));
 			_contact=contact;
 		}
 		protected Contact getContact() {return _contact;}

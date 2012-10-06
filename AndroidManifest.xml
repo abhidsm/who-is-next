@@ -6,6 +6,8 @@
 
     <uses-sdk android:minSdkVersion="7" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" /> 
     <application
         android:name=".WhoIsNextApplication"
         android:icon="@drawable/ic_launcher"
@@ -20,6 +22,14 @@
             </intent-filter>
         </activity>
         <activity android:name=".PhoneContactsActivity"></activity>
+        <receiver android:name=".PhoneStateBroadcastReceiver">
+        	<intent-filter>
+                <action android:name="android.intent.action.PHONE_STATE"/>
+        	</intent-filter>
+        	<intent-filter>
+        	    <action android:name="android.intent.action.NEW_OUTGOING_CALL"/>
+        	</intent-filter>
+  		</receiver>
     </application>
 
 </manifest>

@@ -7,11 +7,17 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Logger;
+
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.provider.BaseColumns;
 import android.provider.ContactsContract;
+import android.provider.ContactsContract.PhoneLookup;
+import android.util.Log;
+import android.widget.Toast;
 
 public class ContactList {
 	private List<Contact> _contacts=new ArrayList<Contact>();
@@ -43,7 +49,7 @@ public class ContactList {
 			FileOutputStream fos = this.context.openFileOutput(WhoIsNextApplication.fileName, Context.MODE_PRIVATE);
 			for(Iterator<Contact> i = this._contacts.iterator(); i.hasNext();){
 				Contact contact = (Contact) i.next();
-				String data = contact.getId()+","; 
+				String data = contact.getId()+","+contact.getDisplayName()+","+contact.getLastTimeContacted()+";"; 
 				fos.write(data.getBytes());
 			}
 			fos.close();
@@ -56,7 +62,7 @@ public class ContactList {
 		}
 	}
 	
-	private String[] getContactIDsFromFile(){
+	private String[] getContactsFromFile(){
 		String data = "";
 		try {
 			FileInputStream fis = this.context.openFileInput(WhoIsNextApplication.fileName);
@@ -73,37 +79,33 @@ public class ContactList {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		String[] contactIDs = data.split(",");
-		return contactIDs;
+		
+		String[] contacts;
+		if(data != ""){
+			contacts = data.split(";");
+		}else{
+			contacts = new String[0];
+		}
+		
+		return contacts;
 	}
 	
 	public void addContactsFromFile(){
-		String[] contactIDs = this.getContactIDsFromFile();
-		for(int i=0; i<contactIDs.length; i++){
-			Contact contact = getContactFromID(contactIDs[i]);
+		String[] contacts = this.getContactsFromFile();
+		//Log.v("addContentsFromFile", "Contacts Length: "+ contacts.length);
+		for(int i=0; i<contacts.length; i++){
+			Contact contact = getContactFromString(contacts[i]);
 			if(contact.getDisplayName() != null)
 				this._contacts.add(contact);	
 		}
 	}
 	
-	private Contact getContactFromID(String contactId){
+	private Contact getContactFromString(String contactString){
+		String[] contactData = contactString.split(",");
 		Contact contact = new Contact();
-		String where = ContactsContract.Data._ID + " = ? ";
-		String[] whereParameters = new String[]{contactId}; 
-        Uri uri=ContactsContract.Contacts.CONTENT_URI;
-        ContentResolver cr = this.context.getContentResolver();
-        Cursor cur=cr.query(uri, null, where, whereParameters, null);
-        if(cur.getCount()>0)
-        {
-            cur.moveToNext();
-            String id = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID));
-            String name=cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-            String lastTimeContacted =cur.getString(cur.getColumnIndex(ContactsContract.Contacts.LAST_TIME_CONTACTED));
-            contact.setId(id);
-            contact.setDisplayName(name);
-            contact.setLastTimeContacted(lastTimeContacted);
-        }
-        cur.close();
+        contact.setId(contactData[0]);
+        contact.setDisplayName(contactData[1]);
+        contact.setLastTimeContacted(contactData[2]);
 		return contact;
 	}
 	
@@ -119,4 +121,15 @@ public class ContactList {
 			}
 		}
 	}
+	
+	public void updateLastTimeContactedValueOfContact(String contactID, String lastTimeContacted){
+		for(Iterator<Contact> i = this._contacts.iterator(); i.hasNext();){
+			Contact contact = (Contact) i.next();
+			if(contact.getId().equals(contactID)){
+				contact.setLastTimeContacted(lastTimeContacted);
+				this.createFile();
+			}
+		}
+	}
+	
 }

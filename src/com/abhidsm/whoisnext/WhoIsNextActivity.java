@@ -33,6 +33,9 @@ public class WhoIsNextActivity extends ListActivity {
         this.contacts = new ContactList(context);
         this.contacts.addContactsFromFile();
         this.listItems = contacts.getContacts();
+        if(this.listItems.isEmpty()){
+        	Toast.makeText(getApplicationContext(), "No contacts added yet. Please click on menu and add contacts to this application.", Toast.LENGTH_LONG).show();        	
+        }
         this.adapter=new PhoneContactsAdapter(this,this.listItems);
 		setListAdapter(this.adapter);
 		this.getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
