@@ -56,7 +56,7 @@ public class CustomPhoneStateListener extends PhoneStateListener{
         default:
             break;
         }
-        Log.e("PhoneStateListener", "Phone State: "+this.state);
+        //Log.e("PhoneStateListener", "Phone State: "+this.state);
         this.state = state;
     }
     
@@ -66,7 +66,7 @@ public class CustomPhoneStateListener extends PhoneStateListener{
     	ContactList contacts = new ContactList(context);
 		String contactID = getContactIDByNumber(number);
 		if(contactID.length() > 0){
-			Log.e("ContactList", "Number: "+number+" callerID: "+contactID);
+			//Log.e("ContactList", "Number: "+number+" callerID: "+contactID);
 	    	contacts.addContactsFromFile();
 	    	contacts.updateLastTimeContactedValueOfContact(contactID, lastTimeContacted);
 		}

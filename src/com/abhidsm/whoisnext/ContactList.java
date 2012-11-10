@@ -128,6 +128,7 @@ public class ContactList {
 			if(contact.getId().equals(contactID)){
 				contact.setLastTimeContacted(lastTimeContacted);
 				this.createFile();
+				break;
 			}
 		}
 	}
