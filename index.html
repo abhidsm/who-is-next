@@ -44,19 +44,24 @@
         <div class="container">
 
             <!-- Main hero unit for a primary marketing message or call to action -->
-            <div class="hero-unit">
-                <h1>WhoIsNext</h1>
+            <div class="hero-unit" itemscope itemtype="http://data-vocabulary.org/Product">
+                <h1>
+                  <img itemprop="image" src="icon_512x512.png" width="60" style="float:left; padding-right:15px;"/>
+                  <span itemprop="name">WhoIsNext</span>
+                </h1>
                 <br />
-                <p class="lead">WhoIsNext is a utility application developed for
+                <p class="lead" itemprop="description">WhoIsNext is a utility application developed for
                 Android mobiles, which will help you to find out to
-                whom you want to call next. Call History or Call Log
+                whom you want to call next.</p> <p itemprop="category"
+                content="Mobile Phone > Utility > Call History / Call Log">Call History or Call Log
                 won't be useful for this purpose. This application
                 uses the LAST_TIME_CONTACTED information and sort the
-                list of contacts based on that info. So you can keep
+                list of contacts based on that info.</p><p> So you can keep
                 in touch with those (Friends or relatives) whom you
                 haven't called recently. This application is not using
                 your contacts for any other purpose. For more details
-                please visit <a href='http://bit.ly/who_is_next'>my blog</a>. </p>
+                please visit <a href='http://bit.ly/who_is_next'>my
+                blog post</a>. </p>
                 <p>
                   <a class="btn btn-primary btn-large"
                 href="https://play.google.com/store/apps/details?id=com.abhidsm.whoisnext">WhoIsNext
@@ -74,7 +79,7 @@
             <hr>
 
             <footer>
-                <p>&copy; abhidsm 2012</p>
+                <p>&copy; abhidsm 2014</p>
             </footer>
 
         </div> <!-- /container -->
